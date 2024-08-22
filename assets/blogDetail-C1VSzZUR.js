@@ -1,0 +1,1 @@
+import{_ as e}from"./ImgLazyLoad.md_vue_type_script_setup_true_lang-BBfFdYgj.js";import{o as a,c as t,e as o,u as s}from"./index-Ch80g4Ls.js";const r={class:"detailContainer"},m={__name:"blogDetail",setup(c){return(_,n)=>(a(),t("div",r,[o(s(e))]))}};export{m as default};
