@@ -144,7 +144,7 @@ jobs:
           wranglerVersion: '3'
 
 ```
-
+结合Cloudflare Pages，使用Github Actions实现自动化部署
 这样每次写完新的博客内容把代码push到仓库，就能自动打包构建并部署到指定的Cloudflare Pages上
 
 **省去了每次都要打包上传部署的琐碎工作，项目的运转效率大大提升**
