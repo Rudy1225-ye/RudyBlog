@@ -90,61 +90,56 @@ desc: "将 Markdown 文件转换为 Vue 组件并渲染，使我能够使用体�
    ```
 
    ### Github Actions自动化部署
+   
+   在项目创建.github/workflows文件夹
+   
+   创建deploy.yml
+   
+   ```yaml
+   name: Blog Deploy
+   
+   on:
+     push:
+       branches:
+         - main
+   
+   
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       permissions:
+         contents: read
+         deployments: write
+   
+       steps:
+         - name: Checkout repository
+           uses: actions/checkout@v3
+   
+         - name: Setup Node.js
+           uses: actions/setup-node@v3
+           with:
+             node-version: '18'
+   
+         - name: Install dependencies
+           run: npm install --legacy-peer-deps
+   
+         - name: Build Project
+           run: npm run build
+   
+         - name: Publish to Cloudflare Pages
+           uses: cloudflare/pages-action@v1
+           with:
+             apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+             accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+             projectName: rudyblog
+             directory: ./dist
+             gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+             wranglerVersion: '3'
+   
+   ```
 
-在项目创建.github/workflows文件夹
+​	结合Cloudflare Pages, 使用Github Actions实现自动化部署
 
-创建deploy.yml
+​	这样每次写完新的博客内容把代码push到仓库，就能自动打包构建并部署到指定的Cloudflare Pages上
 
-```yaml
-name: Blog Deploy
-
-on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.10'
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: rudyblog
-          directory: ./
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Switch what branch you are publishing to.
-          # By default this will be the branch which triggered this workflow
-          branch: main
-          # Optional: Change the working directory
-          # All my website content is in the site folder
-          workingDirectory: ./dist
-          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
-          wranglerVersion: '3'
-
-```
-结合Cloudflare Pages，使用Github Actions实现自动化部署
-这样每次写完新的博客内容把代码push到仓库，就能自动打包构建并部署到指定的Cloudflare Pages上
-
-**省去了每次都要打包上传部署的琐碎工作，项目的运转效率大大提升**
+​	**省去了每次都要打包上传部署的琐碎工作，项目的运转效率大大提升**
